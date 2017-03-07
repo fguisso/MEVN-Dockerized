@@ -14,5 +14,8 @@
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-sourcemaps": "^2.4.1"
+  },
+  "dependencies": {
+    "express": "^4.15.2"
   }
 }
