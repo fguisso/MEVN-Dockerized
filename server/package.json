@@ -1,0 +1,11 @@
+{
+  "name": "api-mevn",
+  "version": "1.0.0",
+  "description": "node, express api",
+  "main": "server.js",
+  "author": "Fernando Guisso",
+  "license": "WTFPL",
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  }
+}
