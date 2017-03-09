@@ -1,0 +1,8 @@
+api:
+  build: ./server
+  links:
+    - mongodb
+  ports:
+    - "3000"
+mongodb:
+  image: mongo
