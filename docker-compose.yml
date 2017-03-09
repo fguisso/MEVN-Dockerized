@@ -1,4 +1,5 @@
 api:
+  container_name: nodejs
   build: ./server
   env_file:
     - ./server/.env
@@ -7,4 +8,5 @@ api:
   ports:
     - "3000"
 mongodb:
+  container_name: mongodb
   image: mongo

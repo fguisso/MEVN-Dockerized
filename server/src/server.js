@@ -22,8 +22,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/users', expressJwt({ secret }))
-  .unless({ path: ['/users/auth', '/users/init', '/users/register'] });
+app.use('/users', expressJwt({ secret })
+  .unless({ path: ['/users/auth', '/users/init', '/users/register'] }));
+
 app.use('/items', expressJwt({ secret }));
 app.use('/info', expressJwt({ secret }));
 

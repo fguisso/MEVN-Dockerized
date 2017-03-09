@@ -1,9 +1,13 @@
 FROM node:7.6.0
 
-RUN npm install -g npm gulp-cli
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
-COPY . /src
-RUN cd /src; npm install;gulp babel
+RUN npm install -g gulp-cli
+
+COPY . /usr/src/app
+
+RUN npm install;gulp babel
 
 EXPOSE 3000
-CMD [ "node", "src/dist/server"]
+CMD [ "node", "dist/server"]
