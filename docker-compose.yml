@@ -1,5 +1,7 @@
 api:
   build: ./server
+  env_file:
+    - ./server/.env
   links:
     - mongodb
   ports:
