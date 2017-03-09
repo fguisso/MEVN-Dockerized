@@ -1,6 +1,6 @@
 FROM node:7.6.0
 
-RUN npm install -g npm grunt-cli gulp
+RUN npm install -g npm gulp-cli
 
 COPY . /src
 RUN cd /src; npm install;gulp babel
