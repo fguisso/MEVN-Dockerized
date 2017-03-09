@@ -7,10 +7,10 @@ const service = {};
 
 const secret = process.env.SECRET;
 
-const auth = (username, password) => {
+const auth = (email, password) => {
   const deferred = Q.defer();
 
-  Users.findOne({ username }, { hash: 1, admin: 1 }, (err, user) => {
+  Users.findOne({ email }, { hash: 1, admin: 1 }, (err, user) => {
     bcrypt.compare(password, user.hash)
     .then((res) => {
       if (user && res) deferred.resolve({ token: jwt.sign({ sub: user._id }, secret), isAdmin: user.admin });
@@ -57,7 +57,7 @@ const create = (userParam) => {
     if (!userParam.admin) userParam.admin = false;
 
     const newUser = new Users({
-      username: userParam.username,
+      email: userParam.email,
       hash: userParam.hash,
       admin: userParam.admin,
       created_at: new Date(),
@@ -69,8 +69,8 @@ const create = (userParam) => {
     });
   };
 
-  Users.findOne({ username: userParam.username }, (err, user) => {
-    if (user) deferred.reject(`Username ${userParam.username} is already taken.`);
+  Users.findOne({ email: userParam.email }, (err, user) => {
+    if (user) deferred.reject(`E-mail ${userParam.email} is already taken.`);
     if (err) deferred.reject(`${err.name} : ${err.message}`);
     else createUser();
   });

@@ -20,7 +20,7 @@ const countItems = () => {
   Items.count({}, (err, count) => {
     if (err) deferred.reject(`${err.name} : ${err.message}`);
     if (count) deferred.resolve(count);
-    else deferred.resolve('Nothing to show here!');
+    else deferred.resolve('Nothing to show here! Wheres my Count?');
   });
 
   return deferred.promise;
@@ -38,6 +38,8 @@ const recentItems = () => {
       if (items) deferred.resolve(items);
       else deferred.resolve('Nothing to show here!');
     });
+
+  return deferred.promise;
 };
 
 const create = (itemParam) => {
@@ -45,7 +47,8 @@ const create = (itemParam) => {
 
   const newItem = new Items({
     name: itemParam.name,
-    description: itemParam.description,
+    solicitante: itemParam.solicitante,
+    status: itemParam.status,
     created_at: new Date(),
     updated_at: new Date() });
 
