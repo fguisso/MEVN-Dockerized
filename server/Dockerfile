@@ -3,7 +3,7 @@ FROM node:7.6.0
 RUN npm install -g npm grunt-cli gulp
 
 COPY . /src
-RUN cd /src; npm install
+RUN cd /src; npm install;gulp babel
 
 EXPOSE 3000
-CMD [ "node", "src/server"]
+CMD [ "node", "src/dist/server"]
