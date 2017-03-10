@@ -10,4 +10,5 @@ COPY . /usr/src/app
 RUN npm install;gulp babel
 
 EXPOSE 3000
-CMD [ "node", "dist/server"]
+
+CMD [ "npm", "start"]

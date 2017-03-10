@@ -22,6 +22,8 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/', (req, res) => res.send('Hello World!'));
+
 app.use('/users', expressJwt({ secret })
   .unless({ path: ['/users/auth', '/users/init', '/users/register'] }));
 

@@ -5,7 +5,7 @@ const router = express.Router();
 
 const init = (req, res) => {
   const userParam = {
-    username: 'Admin',
+    email: 'Admin@admin.com',
     password: 'admin',
     admin: true };
 
@@ -15,7 +15,7 @@ const init = (req, res) => {
 };
 
 const authUser = (req, res) => {
-  userService.auth(req.body.username, req.body.password)
+  userService.auth(req.body.email, req.body.password)
     .then((obj) => {
       if (obj.token) res.status(200).send({ token: obj.token, isAdmin: obj.isAdmin });
       else res.status(401);

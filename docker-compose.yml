@@ -6,7 +6,7 @@ api:
   links:
     - mongodb
   ports:
-    - "3000"
+    - "3000:3000"
 mongodb:
   container_name: mongodb
   image: mongo

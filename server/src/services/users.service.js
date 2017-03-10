@@ -27,7 +27,7 @@ const auth = (email, password) => {
 const list = () => {
   const deferred = Q.defer();
 
-  Users.find({}, (err, users) => {
+  Users.find({}, { hash: 0 }, (err, users) => {
     if (err) deferred.reject(`${err.name} : ${err.message}`);
     if (users) deferred.resolve(users);
     else deferred.resolve('Nothing to show here!');
@@ -71,7 +71,7 @@ const create = (userParam) => {
 
   Users.findOne({ email: userParam.email }, (err, user) => {
     if (user) deferred.reject(`E-mail ${userParam.email} is already taken.`);
-    if (err) deferred.reject(`${err.name} : ${err.message}`);
+    if (err) deferred.reject(`${err.name} : ${err.message}: ${err}`);
     else createUser();
   });
 
