@@ -10,15 +10,23 @@ const secret = process.env.SECRET;
 const auth = (email, password) => {
   const deferred = Q.defer();
 
-  Users.findOne({ email }, { hash: 1, admin: 1 }, (err, user) => {
-    bcrypt.compare(password, user.hash)
-    .then((res) => {
-      if (user && res) deferred.resolve({ token: jwt.sign({ sub: user._id }, secret), isAdmin: user.admin });
-      if (!res) deferred.reject('Password incorrect!');
-      else deferred.resolve('Nothing to show here!');
-    })
-    .catch(e => deferred.reject(`${e.name} : ${e.message}`));
-    if (err) deferred.reject(`${err.name} : ${err.message}`);
+  const authenticate = () => {
+    Users.findOne({ email }, { hash: 1, admin: 1 }, (err, user) => {
+      bcrypt.compare(password, user.hash)
+      .then((res) => {
+        if (user && res) deferred.resolve({ token: jwt.sign({ sub: user._id }, secret), isAdmin: user.admin });
+        if (!res) deferred.reject('Password incorrect!');
+        else deferred.resolve('Nothing to show here!');
+      })
+      .catch(e => deferred.reject(`${e.name} : ${e.message}`));
+      if (err) deferred.reject(`${err.name} : ${err.message}`);
+    });
+  };
+
+  Users.findOne({ email }, (err, user) => {
+    if (!user) deferred.reject(`E-mail ${email} not exist.`);
+    if (err) deferred.reject(`${err.name} : ${err.message}: ${err}`);
+    else authenticate();
   });
 
   return deferred.promise;
@@ -30,6 +38,18 @@ const list = () => {
   Users.find({}, { hash: 0 }, (err, users) => {
     if (err) deferred.reject(`${err.name} : ${err.message}`);
     if (users) deferred.resolve(users);
+    else deferred.resolve('Nothing to show here!');
+  });
+
+  return deferred.promise;
+};
+
+const getById = (_id) => {
+  const deferred = Q.defer();
+
+  Users.findById(_id, { hash: 0 }, (err, user) => {
+    if (err) deferred.reject(`${err.name} : ${err.message}`);
+    if (user) deferred.resolve(user);
     else deferred.resolve('Nothing to show here!');
   });
 
@@ -107,6 +127,7 @@ const _delete = (_id) => {
 service.auth = auth;
 service.list = list;
 service.count = countUsers;
+service.getById = getById;
 service.create = create;
 service.update = update;
 service.delete = _delete;

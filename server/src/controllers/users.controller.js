@@ -29,6 +29,12 @@ const list = (req, res) => {
     .catch(err => res.status(400).send(err));
 };
 
+const getById = (req, res) => {
+  userService.getById(req.params._id)
+    .then(users => res.status(200).json(users))
+    .catch(err => res.status(400).send(err));
+};
+
 const registerUser = (req, res) => {
   userService.create(req.body)
     .then(msg => res.status(200).send(msg))
@@ -48,8 +54,9 @@ const deleteUser = (req, res) => {
 };
 
 router.get('/init', init);
-router.post('/auth', authUser);
 router.get('/list', list);
+router.get('/:_id', getById);
+router.post('/auth', authUser);
 router.post('/register', registerUser);
 router.put('/:_id', updateUser);
 router.delete('/:_id', deleteUser);
