@@ -1,6 +1,7 @@
 api:
   container_name: nodejs
   build: ./server
+  working_dir: /usr/src/api
   env_file:
     - ./server/.env
   links:
