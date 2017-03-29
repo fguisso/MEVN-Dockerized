@@ -1,5 +1,5 @@
 <template>
-  <div class="column is-3">
+  <div class="column is-one-quarter">
     <aside class="menu">
       <ul class="menu-list">
         <li>
