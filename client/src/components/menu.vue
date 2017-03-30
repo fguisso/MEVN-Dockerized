@@ -1,5 +1,5 @@
 <template>
-  <div class="column is-one-quarter">
+  <div class="column is-3">
     <aside class="menu">
       <ul class="menu-list">
         <li>
@@ -40,6 +40,8 @@ export default {
       this.$router.push({ name: 'auth.signin' });
     },
     navigate(index) {
+      // eslint-disable-next-line
+      console.log('hello!');
       this.$router.push({ name: index });
     },
   },

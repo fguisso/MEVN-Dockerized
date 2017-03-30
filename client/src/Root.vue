@@ -2,8 +2,8 @@
   <div>
     <cc-nav-bar v-show="!(['auth.signin', 'auth.signup'].indexOf($route.name) > -1)"></cc-nav-bar>
     <div class="columns">
-    <cc-menu v-show="!(['auth.signin', 'auth.signup'].indexOf($route.name) > -1)"></cc-menu>
-    <router-view></router-view>
+      <cc-menu v-show="!(['auth.signin', 'auth.signup'].indexOf($route.name) > -1)"></cc-menu>
+      <router-view></router-view>
     </div>
   </div>
 </template>
