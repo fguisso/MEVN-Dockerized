@@ -40,8 +40,6 @@ export default {
       this.$router.push({ name: 'auth.signin' });
     },
     navigate(index) {
-      // eslint-disable-next-line
-      console.log('hello!');
       this.$router.push({ name: index });
     },
   },
