@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import CcNavBar from './components/navbar';
-import CcMenu from './components/menu';
+import CcNavBar from 'components/navbar';
+import CcMenu from 'components/menu';
 
 export default {
   name: 'app',
