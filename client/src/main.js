@@ -2,6 +2,9 @@ import Vue from 'vue';
 
 import App from './Root';
 import router from './router';
+import htttpPlugin from './plugins/http';
+
+Vue.use(htttpPlugin);
 
 /* eslint-disable no-new */
 new Vue({ // injects the Store into all components
