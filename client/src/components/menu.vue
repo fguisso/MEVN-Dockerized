@@ -15,7 +15,7 @@
           </a>
         </li>
         <li>
-          <a @click="navigate('items')">
+          <a @click="navigate('items.list')">
             <span class="icon"><i class="fa fa-list"></i></span>
             <span>Itens</span>
           </a>
