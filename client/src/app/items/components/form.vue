@@ -22,7 +22,8 @@
         </p>
       </div>
       <hr>
-      <button type="button" class="button is-info" @click="submit">Registrar</button>
+      <button v-bind:class="{ 'is-disabled' : !(this.name !== '' && this.solicitante !== '' && this.status !== '') }" type="button"  class="button is-primary" @click="submit">Registrar</button>
+      <button type="button" class="button is-danger" @click="exit">Sair</button>
     </div>
   </div>
 </template>
@@ -42,6 +43,9 @@
         this.http.post('/items/register', { name, solicitante, status })
           .then(() => this.$router.push({ name: 'items.list' }))
           .catch(err => console.log(err));
+      },
+      exit() {
+        this.$router.push({ name: 'items.list' });
       },
     },
   };
