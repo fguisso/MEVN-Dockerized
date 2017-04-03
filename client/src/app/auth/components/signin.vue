@@ -27,7 +27,7 @@
       </div>
     </section>
     <footer class="modal-card-foot">
-      <button class="button is-success" @click="submit">Entrar</a>
+      <button class="button is-success" @click="submit">Entrar</button>
     </footer>
   </div>
 </template>
