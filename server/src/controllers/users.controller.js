@@ -5,6 +5,7 @@ const router = express.Router();
 
 const init = (req, res) => {
   const userParam = {
+    name: 'Admin',
     email: 'Admin@admin.com',
     password: 'admin',
     admin: true };
@@ -17,8 +18,13 @@ const init = (req, res) => {
 const authUser = (req, res) => {
   userService.auth(req.body.email, req.body.password)
     .then((obj) => {
-      if (obj.token) res.status(200).send({ token: obj.token, isAdmin: obj.isAdmin });
-      else res.status(401);
+      if (obj.token) {
+        res.status(200).send({
+          token: obj.token,
+          name: obj.name,
+          avatarUrl: obj.avatar,
+          isAdmin: obj.isAdmin });
+      } else res.status(401);
     })
     .catch(err => res.status(400).send(err));
 };

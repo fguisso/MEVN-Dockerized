@@ -11,10 +11,16 @@ const auth = (email, password) => {
   const deferred = Q.defer();
 
   const authenticate = () => {
-    Users.findOne({ email }, { hash: 1, admin: 1 }, (err, user) => {
+    Users.findOne({ email }, { created_at: 0, updated_at: 0 }, (err, user) => {
       bcrypt.compare(password, user.hash)
       .then((res) => {
-        if (user && res) deferred.resolve({ token: jwt.sign({ sub: user._id }, secret), isAdmin: user.admin });
+        if (user && res) {
+          deferred.resolve({
+            token: jwt.sign({ sub: user._id }, secret),
+            name: user.name,
+            avatar: user.avatar,
+            isAdmin: user.admin });
+        }
         if (!res) deferred.reject('Password incorrect!');
         else deferred.resolve('Nothing to show here!');
       })
@@ -25,7 +31,7 @@ const auth = (email, password) => {
 
   Users.findOne({ email }, (err, user) => {
     if (err) deferred.reject(`${err.name} : ${err.message}: ${err}`);
-    if (user === null) deferred.reject(`E-mail ${email} not exist.`);
+    if (!user) deferred.reject(`E-mail ${email} not exist.`);
     else authenticate();
   });
 
@@ -35,7 +41,7 @@ const auth = (email, password) => {
 const list = () => {
   const deferred = Q.defer();
 
-  Users.find({}, { hash: 0 }, (err, users) => {
+  Users.find({}, { hash: 0, email: 0, avatar: 0 }, (err, users) => {
     if (err) deferred.reject(`${err.name} : ${err.message}`);
     if (users) deferred.resolve(users);
     else deferred.resolve('Nothing to show here!');
@@ -47,7 +53,7 @@ const list = () => {
 const getById = (_id) => {
   const deferred = Q.defer();
 
-  Users.findById(_id, { hash: 0 }, (err, user) => {
+  Users.findById(_id, { hash: 0, email: 0, avatar: 0 }, (err, user) => {
     if (err) deferred.reject(`${err.name} : ${err.message}`);
     if (user) deferred.resolve(user);
     else deferred.resolve('Nothing to show here!');
@@ -76,10 +82,18 @@ const create = (userParam) => {
 
     if (!userParam.admin) userParam.admin = false;
 
+    const avatarRandom = () => {
+      const ghIds = [342215, 5755568, 499550];
+      const randNum = Math.floor((Math.random() * 3) + 1);
+      return `https://avatars0.githubusercontent.com/u/${ghIds[randNum]}?v=3&s=32`;
+    };
+
     const newUser = new Users({
+      name: userParam.name,
       email: userParam.email,
       hash: userParam.hash,
       admin: userParam.admin,
+      avatar: avatarRandom(),
       created_at: new Date(),
       updated_at: new Date() });
 
