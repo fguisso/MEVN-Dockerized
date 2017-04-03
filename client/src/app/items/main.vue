@@ -29,34 +29,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr v-for="item in itemsList">
           <td><input type="checkbox"></td>
-          <td>Bolacha</td>
-          <td>Fernando</td>
-          <td>Comida</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.solicitante }}</td>
+          <td>{{ item.status }}</td>
           <td>
-            <a class="button is-link" href="">Editar</a>
-            <a class="button is-link" href="">Apagar</a>
-          </td>
-        </tr>
-        <tr>
-          <td><input type="checkbox"></td>
-          <td>Batata doce</td>
-          <td>Gutem</td>
-          <td>Saiu para entrega</td>
-          <td>
-            <a class="button is-link" href="">Editar</a>
-            <a class="button is-link" href="">Apagar</a>
-          </td>
-        </tr>
-        <tr>
-          <td><input type="checkbox"></td>
-          <td>Bitcoins</td>
-          <td>Batata</td>
-          <td>Recebido</td>
-          <td>
-            <a class="button is-link" href="">Editar</a>
-            <a class="button is-link" href="">Apagar</a>
+            <a class="button is-link">Editar</a>
+            <a class="button is-link" @click="remove(item._id)">Apagar</a>
           </td>
         </tr>
       </tbody>
@@ -76,7 +56,29 @@
 </template>
 
 <script>
+/* eslint-disable no-console */
   export default {
     name: 'items-view',
+    data: () => ({
+      itemsList: [],
+    }),
+    beforeMount() {
+      this.http.get('/items/list')
+        .then((res) => {
+          this.itemsList = res.data;
+        });
+    },
+    methods: {
+      remove(_id) {
+        this.http.delete(`/items/${_id}`)
+          .then(() => {
+            this.http.get('/items/list')
+              .then((res) => {
+                this.itemsList = res.data;
+              });
+          })
+          .catch(err => console.log(err));
+      },
+    },
   };
 </script>
