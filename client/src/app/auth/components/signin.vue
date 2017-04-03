@@ -46,8 +46,11 @@
       submit() {
         const { email, password } = this;
         this.http.post('/users/auth', { email, password })
-          .then(res => console.log(res.data))
-          .catch(err => console.log(err));
+          .then(res => {
+            localStorage.setItem('id_token', res.data.token);
+            this.$router.push({ name: 'dashboard' });
+          })
+          .catch(err => this.$router.push({ name: 'auth.signin' }));
       },
     },
   };
