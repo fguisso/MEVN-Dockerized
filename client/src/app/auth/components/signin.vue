@@ -35,6 +35,7 @@
 <script>
 /* eslint-disable */
   import { mapActions } from 'vuex';
+  import { setToken } from 'src/plugins/http';
 
   export default {
     name: 'Entrar',
@@ -56,6 +57,7 @@
               isAdmin: res.data.isAdmin,
               avatarUrl: res.data.avatarUrl
             };
+            setToken(res.data.token);
             this.setUser(user)
               .then(() => {
                 localStorage.setItem('id_token', res.data.token);

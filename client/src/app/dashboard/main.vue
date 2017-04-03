@@ -6,19 +6,19 @@
           <div class="level-item has-text-centered">
             <div>
               <p class="heading">Usuários</p>
-              <p class="title">333</p>
+              <p class="title">{{ users }}</p>
             </div>
           </div>
           <div class="level-item has-text-centered">
             <div>
               <p class="heading">Itens</p>
-              <p class="title">123</p>
+              <p class="title">{{ items }}</p>
             </div>
           </div>
           <div class="level-item has-text-centered">
             <div>
               <p class="heading">Usuários Logados</p>
-              <p class="title">666</p>
+              <p class="title">{{ loged }}</p>
             </div>
           </div>
         </nav>
@@ -27,20 +27,12 @@
     </section>
     <section class="section">
       <div class="container">
-        <h1 class="title is-3">Ultimos itens criados</h1>
-        <table class="table column is-6">
+        <h1 class="title is-8">Ultimos itens criados</h1>
+        <table class="table column is-8">
           <tbody>
-            <tr>
-              <td>Lorem ipsum dolor</td>
-              <td>12 seg atrás</td>
-            </tr>
-            <tr>
-              <td>Lorem ipsum dolor set amem</td>
-              <td>13 seg atrás</td>
-            </tr>
-            <tr>
-              <td>Lorem ipsum non dolor exist</td>
-              <td>há 2 horas</td>
+            <tr v-for="item in recentItems">
+              <td>{{ item.name }}</td>
+              <td>Criado a {{ item.seconds }} Segundos</td>
             </tr>
           </tbody>
         </table>
@@ -50,7 +42,29 @@
 </template>
 
 <script>
+/* eslint-disable */
   export default {
     name: 'dashboard',
+    data: () => ({
+      users: 0,
+      items: 0,
+      loged: 1,
+      recentItems: [],
+      dateNow: new Date(),
+    }),
+    beforeMount() {
+      this.http.get('/info')
+        .then((res) => {
+          this.users = res.data.userCount;
+          this.items = res.data.itemsCount;
+          res.data.recentes.forEach((item) => {
+            const itemDate = new Date(item.created_at);
+            const seconds = this.dateNow.getTime()/1000 - itemDate.getTime()/1000;
+            item.seconds = Math.floor(seconds);
+          });
+          this.recentItems = res.data.recentes;
+        })
+        .catch(err => console.log(err));
+    },
   };
 </script>
