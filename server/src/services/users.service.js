@@ -24,8 +24,8 @@ const auth = (email, password) => {
   };
 
   Users.findOne({ email }, (err, user) => {
-    if (!user) deferred.reject(`E-mail ${email} not exist.`);
     if (err) deferred.reject(`${err.name} : ${err.message}: ${err}`);
+    if (user === null) deferred.reject(`E-mail ${email} not exist.`);
     else authenticate();
   });
 
