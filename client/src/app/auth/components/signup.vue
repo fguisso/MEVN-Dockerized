@@ -6,6 +6,15 @@
     </header>
     <section class="modal-card-body">
       <div class="content">
+        <h3>Nome:</h3>
+        <div class="field">
+          <p class="control has-icon">
+            <input class="input is-medium" type="email" placeholder="Your name" v-model="name">
+            <span class="icon is-medium">
+              <i class="fa fa-envelope"></i>
+            </span>
+          </p>
+        </div>
         <h3>Email:</h3>
         <div class="field">
           <p class="control has-icon">
@@ -36,7 +45,7 @@
     </div>
     </section>
     <footer class="modal-card-foot">
-      <button v-bind:class="{ 'is-disabled' : !(isPassConfirmed()) || this.password === '' }" class="button is-success">Registrar</a>
+      <button v-bind:class="{ 'is-disabled' : !(isPassConfirmed()) || this.password === '' }" class="button is-success" @click="submit">Registrar</a>
     </footer>
   </div>
 </template>
@@ -46,16 +55,22 @@
     name: 'Registrar',
     data() {
       return {
+        name: '',
         email: '',
         password: '',
         pwConfirm: '',
-        confirmed: true,
       };
     },
     methods: {
       isPassConfirmed() {
         const { password, pwConfirm } = this;
         return password === pwConfirm;
+      },
+      submit() {
+        const { name, email, password } = this;
+        this.http.post('/users/register', { name, email, password })
+          .then(() => this.$router.push({ name: 'auth.signin' }))
+          .catch(() => this.$router.push({ name: 'auth.signup' }));
       },
     },
   };
