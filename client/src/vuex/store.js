@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Vue from 'vue';
 import Vuex from 'vuex';
 
@@ -5,16 +6,19 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    user: {
-      name: '',
-      isAdmin: '',
-      avatarUrl: '',
-    },
+    user: {},
   },
   mutations: {
-    SET_USER_INFOS(store, obj) {
-      /* eslint-disable no-param-reassign */
-      store.user = obj.user;
+    SET_USER(state, user) {
+      state.user = user;
     },
   },
+  actions: {
+    setUser({ commit }, user) {
+      commit('SET_USER', user);
+    },
+  },
+  getters: {
+    getUser: state => state.user
+  }
 });

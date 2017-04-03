@@ -34,6 +34,8 @@
 
 <script>
 /* eslint-disable */
+  import { mapActions } from 'vuex';
+
   export default {
     name: 'Entrar',
     data() {
@@ -43,14 +45,29 @@
       };
     },
     methods: {
+      ...mapActions(['setUser']),
       submit() {
         const { email, password } = this;
         this.http.post('/users/auth', { email, password })
-          .then(res => {
-            localStorage.setItem('id_token', res.data.token);
-            this.$router.push({ name: 'dashboard' });
+          .then((res) => {
+            /* eslint-disable prefer-const */
+            let user = {
+              name: res.data.name,
+              isAdmin: res.data.isAdmin,
+              avatarUrl: res.data.avatarUrl
+            };
+            this.setUser(user)
+              .then(() => {
+                localStorage.setItem('id_token', res.data.token);
+                this.$router.push({ name: 'dashboard' });
+              })
+              .catch(err => console.log(err));
           })
-          .catch(err => this.$router.push({ name: 'auth.signin' }));
+          .catch(() => {
+            this.email = '';
+            this.password = '';
+            this.$router.push({ name: 'auth.signin' });
+          });
       },
     },
   };
