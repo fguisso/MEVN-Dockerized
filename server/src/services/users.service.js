@@ -84,7 +84,7 @@ const create = (userParam) => {
 
     const avatarRandom = () => {
       const ghIds = [342215, 5755568, 499550];
-      const randNum = Math.floor((Math.random() * 3) + 1);
+      const randNum = Math.floor((Math.random() * 3));
       return `https://avatars0.githubusercontent.com/u/${ghIds[randNum]}?v=3&s=32`;
     };
 
