@@ -35,7 +35,7 @@
           <td>{{ item.solicitante }}</td>
           <td>{{ item.status }}</td>
           <td>
-            <a class="button is-link">Editar</a>
+            <a class="button is-link" @click="edit(item._id)">Editar</a>
             <a class="button is-link" @click="remove(item._id)">Apagar</a>
           </td>
         </tr>
@@ -78,6 +78,9 @@
               });
           })
           .catch(err => console.log(err));
+      },
+      edit(_id) {
+        this.$router.push({ name: 'items.edit', params: { _id } });
       },
       navigate(index) {
         this.$router.push({ name: index });
