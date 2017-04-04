@@ -9,7 +9,7 @@
           </a>
         </li>
         <li>
-          <a @click="navigate('users')">
+          <a @click="navigate('users.list')">
             <span class="icon"><i class="fa fa-user"></i></span>
             <span>Usuários</span>
           </a>
