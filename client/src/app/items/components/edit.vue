@@ -48,10 +48,6 @@
             .then(() => this.$router.push({ name: 'items.list' }))
             .catch(err => console.log(err));
         }
-        // const { name, solicitante, status } = this;
-        // this.http.post('/items/register', { name, solicitante, status })
-        //   .then(() => this.$router.push({ name: 'items.list' }))
-        //   .catch(err => console.log(err));
       },
       exit() {
         this.$router.push({ name: 'items.list' });
