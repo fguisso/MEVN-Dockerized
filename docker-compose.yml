@@ -1,9 +1,9 @@
 api:
   container_name: nodejs
-  build: ./server
+  build: ./api
   working_dir: /usr/src/api
   env_file:
-    - ./server/.env
+    - ./api/.env
   links:
     - mongodb
   ports:
@@ -12,3 +12,12 @@ api:
 mongodb:
   container_name: mongodb
   image: mongo
+server:
+  container_name: static
+  build: ./client
+  working_dir: /usr/src/www
+  environment:
+    - API_URL=http://177.53.141.83:3000
+  ports:
+    - "8080:8080"
+  command: yarn run start
