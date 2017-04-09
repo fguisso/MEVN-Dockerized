@@ -11,6 +11,20 @@ docker-compose up
 docker-compose up --build
 ```
 
+Okay, now your containers are running!
+
+API >> `localhost:3000`
+CLient >> `localhost:8080`
+
+To create admin's user:
+
+GET `localhost:3000/users/init`
+
+email: Admin@admin.com
+password: admin
+
+For more about api endpoints, search api-blueprint in api folder.
+
 For edit, start localy, rebuild
 ```
 // in client folder, for install modules
