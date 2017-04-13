@@ -53,6 +53,8 @@ Authenticate a user and retrive a token.
 
      {
         "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1OGM5OWIzZDNjOWJmOTAwMGY5ZjQ3N2UiLCJpYXQiOjE0ODk2MDc3MDV9.cCUbmCEasO-jogHy3D10spn1x-4eankVhPEL3BH7KXQ",
+        "name": "user_name",
+        "avatar": "url_to_avatar_img",
         "isAdmin": false
      }
 
@@ -68,6 +70,8 @@ Authenticate a user and retrive a token.
 
      {
         "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1OGM5OWIzZDNjOWJmOTAwMGY5ZjQ3N2UiLCJpYXQiOjE0ODk2MDc3MDV9.cCUbmCEasO-jogHy3D10spn1x-4eankVhPEL3BH7KXQ",
+        "name": "user_name",
+        "avatar": "url_to_avatar_img",
         "isAdmin": true
      }
 
@@ -311,3 +315,50 @@ List of all items
 + Response 200 (plain/text)
 
      Item has been deleted.
+
+# Group Infos
+This section groups system users resorces.
+
+# Get info [/infos]
+Get some informations about database.
+
+## Infos [GET]
+
++ Resquest
+    * Headers
+
+     Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1OGM5OWIzZDNjOWJmOTAwMGY5ZjQ3N2UiLCJpYXQiOjE0ODk2MDc3MDV9.cCUbmCEasO-jogHy3D10spn1x-4eankVhPEL3BH7KXQ
+
++ Response 200 (plain/text)
+
+     {
+       "itemsCount": 7,
+       "userCount": 10,
+       "recentes": [
+         {
+           "_id": "58e35e8301cb61000ffebbb2",
+           "name": "Relógio",
+           "created_at": "2017-04-04T08:51:15.967Z"
+         },
+         {
+           "_id": "58e35e7401cb61000ffebbb1",
+           "name": "Caramelo",
+           "created_at": "2017-04-04T08:51:00.144Z"
+         },
+         {
+           "_id": "58e35e7401cb61000asckdj1",
+           "name": "Pastel",
+           "created_at": "2017-04-04T07:21:00.111Z"
+         },
+         {
+           "_id": "58e35e7401cb610001dfer1",
+           "name": "Melão",
+           "created_at": "2017-04-04T08:12:00.122Z"
+         },
+         {
+           "_id": "58e35e7401cb6100012dfer1",
+           "name": "Maça",
+           "created_at": "2017-04-04T08:00:00.144Z"
+         }
+       ]
+     }
