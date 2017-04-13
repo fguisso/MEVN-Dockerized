@@ -14,6 +14,6 @@ RUN cd /usr/src/vue && yarn && yarn run build && \
 WORKDIR /usr/src/www
 
 COPY ./server /usr/src/www
-RUN yarn && echo $API_URL
+RUN yarn
 
 EXPOSE 8080

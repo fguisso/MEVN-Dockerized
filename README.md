@@ -47,7 +47,7 @@ yarn
 
 gulp
 
-// after babel crete a dist folder, for execute localy
+// after babel crete a dist folder, copy server in dist folder and run:
 
 yarn run start
 //or
