@@ -1,6 +1,6 @@
 import axios from 'axios';
 /* eslint-disable no-undef */
-const apiUrl = `${API_URL}`;
+const apiUrl = 'http://localhost:3000/';
 
 export const http = axios.create({
   baseURL: apiUrl,

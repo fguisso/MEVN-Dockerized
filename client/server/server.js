@@ -10,4 +10,5 @@ app.use('/static', express.static('./static'));
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname + '/index.html')));
 
-const server = app.listen(port, '0.0.0.0', () => console.log('And here we go!'));
+const server = app.listen(port, '0.0.0.0', () =>
+  console.log(`Server listening in http://${server.address().address}:${server.address().port}`));

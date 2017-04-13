@@ -29,3 +29,10 @@ export default {
   },
 };
 </script>
+
+
+<style>
+  .nav-item img {
+    max-height: 2.3rem;
+  }
+</style>
