@@ -6,10 +6,14 @@ RUN mkdir -p /usr/src/www && \
   echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
   apt-get update && apt-get install yarn && npm install -g gulp-cli
 
+COPY . /usr/src/vue
+RUN cd /usr/src/vue && yarn && yarn run build && \
+  cp -r /usr/src/vue/dist/static /usr/src/www && \
+  cp -r /usr/src/vue/dist/index.html /usr/src/www/index.html
+
 WORKDIR /usr/src/www
 
 COPY ./server /usr/src/www
-COPY ./dist /usr/src/www
-RUN yarn;
+RUN yarn && echo $API_URL
 
 EXPOSE 8080
