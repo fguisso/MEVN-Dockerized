@@ -1,21 +1,31 @@
-api:
-  container_name: nodejs
-  build: ./api
-  working_dir: /usr/src/api
-  env_file:
-    - ./api/.env
-  links:
-    - mongodb
-  ports:
-    - "3000:3000"
-  command: yarn run start
-mongodb:
-  container_name: mongodb
-  image: mongo
-server:
-  container_name: static
-  build: ./client
-  working_dir: /usr/src/www
-  ports:
-    - "8080:8080"
-  command: yarn run start
+version: "3.7"
+
+services:
+  api:
+    container_name: nodejs
+    build: 
+      context: ./api
+    env_file:
+      - ./api/.env
+    ports:
+      - "3000:3000"
+    networks:
+      - mevn-dockerized
+    command: yarn run start
+
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    networks:
+      - mevn-dockerized
+  server:
+    container_name: static
+    build: 
+      context: ./client
+    ports:
+      - "8080:8080"
+    command: yarn run start
+
+networks:
+  mevn-dockerized:
+    driver: bridge

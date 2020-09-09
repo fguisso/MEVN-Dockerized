@@ -1,5 +1,7 @@
 FROM node:7.6.0
 
+WORKDIR /usr/src/api
+
 RUN mkdir -p /usr/src/api && \
   apt-get update && apt-get install -y curl apt-transport-https && \
   curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
