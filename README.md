@@ -20,7 +20,7 @@ To create admin's user:
 
 GET `localhost:3000/users/init`
 
-email: Admin@admin.com
+email: admin@admin.com
 password: admin
 
 For more about api endpoints, search api-blueprint in api folder.
