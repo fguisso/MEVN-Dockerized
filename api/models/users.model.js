@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose')
 
-const Schema = mongoose.Schema;
+const Schema = mongoose.Schema
 
 const userSchema = new Schema({
   name: { type: String, required: true },
@@ -9,6 +9,6 @@ const userSchema = new Schema({
   admin: { type: Boolean, required: true },
   avatar: { type: String, required: true },
   created_at: { type: Date, required: true },
-  updated_at: { type: Date, required: true } });
+  updated_at: { type: Date, required: true } })
 
-module.exports = mongoose.model('User', userSchema, 'users');
+module.exports = mongoose.model('User', userSchema, 'users')

@@ -1,17 +1,16 @@
-version: "3.7"
+version: "3.3"
 
 services:
   api:
-    container_name: nodejs
-    build: 
+    container_name: api
+    build:
       context: ./api
-    env_file:
-      - ./api/.env
+    env_file: ./api/.env
     ports:
       - "3000:3000"
     networks:
       - mevn-dockerized
-    command: yarn run start
+    command: ["npm", "start"]
 
   mongodb:
     container_name: mongodb
@@ -20,7 +19,7 @@ services:
       - mevn-dockerized
   server:
     container_name: static
-    build: 
+    build:
       context: ./client
     ports:
       - "8080:8080"
@@ -28,4 +27,3 @@ services:
 
 networks:
   mevn-dockerized:
-    driver: bridge
