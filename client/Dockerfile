@@ -1,7 +1,8 @@
-FROM node:8.17.0
+FROM node:16.15.0
 
 RUN mkdir -p /usr/src/www && \
-  apt-get -y update && apt-get install -y curl apt-transport-https
+  apt-get -y update && \
+  npm install -g http-server
 
 COPY . /usr/src/vue
 WORKDIR /usr/src/vue
@@ -12,8 +13,5 @@ RUN \
   cp -r /usr/src/vue/dist/index.html /usr/src/www/index.html
 
 WORKDIR /usr/src/www
-
-COPY ./server /usr/src/www
-RUN npm install
-
 EXPOSE 8080
+CMD http-server -p 8080 --log-ip
