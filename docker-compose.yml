@@ -18,10 +18,10 @@ services:
     networks:
       - mevn-dockerized
 
-  server:
-    container_name: static
+  portal:
+    container_name: portal
     build:
-      context: ./client
+      context: ./portal
     ports:
       - "8080:8080"
 
