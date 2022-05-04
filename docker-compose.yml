@@ -17,13 +17,14 @@ services:
     image: mongo
     networks:
       - mevn-dockerized
+
   server:
     container_name: static
     build:
       context: ./client
     ports:
       - "8080:8080"
-    command: yarn run start
+    command: npm start
 
 networks:
   mevn-dockerized:
