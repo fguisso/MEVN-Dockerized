@@ -2,54 +2,49 @@
 
 MongoDB, Express, Vue and NodeJS
 
-In this time, every is okay, just run
-```
+## Running
+```bash
 docker-compose up
-
-// if you make any changes, just use this flag
-
-docker-compose up --build
 ```
 
 Okay, now your containers are running!
 
-API >> `localhost:3000`
-CLient >> `localhost:8080`
+|||
+|---|---|
+|API|http://localhost:3000|
+|Webapp|http://localhost:8080|
 
 To create admin's user:
 
-GET `localhost:3000/users/init`
+GET `http://localhost:3000/users/init`
 
-email: admin@admin.com
-password: admin
+ATENTION: This is a bad pratice, I'll remove this method in future and use a random pass generator.
 
-For more about api endpoints, search api-blueprint in api folder.
+|||
+|-|-|
+|email|admin@admin.com|
+|password|admin|
 
-For edit, start localy, rebuild
+For more about api endpoints, look at [api-blueprint](https://github.com/fguisso/MEVN-Dockerized/blob/main/api/api-blueprint.md).
+
+## Development
+### Webapp
+```bash
+# in portal folder, for install modules
+npm install
+
+# for run in dev mode
+npm run serve
+
+# Compile to dist folder
+npm run build
 ```
-// in client folder, for install modules
 
-yarn
+### API
+```bash
+# in api folder, install all dependencies
+npm install
 
-// for run in dev mode
-
-yarn run dev
-
-// Compile to dist folder
-
-yarn run build
-
-// in api folder, install all dependencies
-
-yarn
-
-// for dev and watch files, run gulp
-
-gulp
-
-// after babel crete a dist folder, copy server in dist folder and run:
-
-yarn run start
-//or
-node dist/server
+# running api
+npm start
 ```
