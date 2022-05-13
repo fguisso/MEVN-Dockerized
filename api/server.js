@@ -1,15 +1,31 @@
 const express = require('express')
+const session = require('express-session')
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 const expressJwt = require('express-jwt')
+const csrf = require('csurf')
 
 const app = express()
 const secret = process.env.SECRET
+const csrfProtection = csrf({ cookie: true })
 
 app.set('port', process.env.PORT || 3000)
 app.set('host', process.env.HOST || '0.0.0.0')
 
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
+app.use(cookieParser())
+app.use(csrfProtection)
+app.use(session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: 'auto',
+        httpOnly: true,
+        maxAge: 3600000
+    }
+}))
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*')
@@ -33,6 +49,7 @@ app.use('/info', expressJwt({ secret, algorithms: ['HS256'] }))
 app.use('/users', require('./controllers/users.controller.js'))
 app.use('/items', require('./controllers/items.controller.js'))
 app.use('/info', require('./controllers/infos.controller.js'))
+app.use('/auth', require('./controllers/auth.controller.js'))
 
 app.use((err, req, res, next) => {
     if (err.name === 'UnauthorizedError') res.status(401).send('Invalid token.')

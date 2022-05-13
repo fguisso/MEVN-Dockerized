@@ -1,6 +1,7 @@
 .DS_Store
 .AppleDouble
 .LSOverride
+.env
 
 node_modules/
 server/dist/
