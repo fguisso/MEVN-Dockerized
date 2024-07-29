@@ -3,7 +3,7 @@
   "version": "1.5.0",
   "description": "node, express api",
   "main": "server.js",
-  "author": "Fernando Guisso",
+  "author": "Jacob Mirelez",
   "license": "WTFPL",
   "scripts": {
     "start": "node server"
