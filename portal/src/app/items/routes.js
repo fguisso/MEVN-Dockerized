@@ -1,8 +1,7 @@
-/* eslint-disable global-require */
-const Main = (r) => require.ensure([], () => r(require('./main.vue')), 'group-items');
-const Edit = (r) => require.ensure([], () => r(require('./components/edit.vue')), 'group-items');
-const Form = (r) => require.ensure([], () => r(require('./components/form.vue')), 'group-items');
-const List = (r) => require.ensure([], () => r(require('./components/list.vue')), 'group-items');
+const Main = () => import('./main.vue');
+const Edit = () => import('./components/edit.vue');
+const Form = () => import('./components/form.vue');
+const List = () => import('./components/list.vue');
 
 const children = [{
   name: 'items.edit',

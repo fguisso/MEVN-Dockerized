@@ -1,5 +1,4 @@
-// eslint-disable-next-line
-const Dashboard = r => require.ensure([], () => r(require('./main')), 'group-dashboard');
+const Dashboard = () => import('./main.vue');
 
 export default [
   {
@@ -9,7 +8,7 @@ export default [
     meta: { requiresAuth: true },
   }, {
     name: 'catchall',
-    path: '*',
+    path: '/:pathMatch(.*)*',
     component: Dashboard,
     meta: { requiresAuth: true },
   },

@@ -63,7 +63,7 @@
         const { email, password } = this;
         this.http.post('/users/auth', { email, password })
           .then((res) => {
-            /* eslint-disable prefer-const */
+             
             let user = {
               name: res.data.name,
               isAdmin: res.data.isAdmin,

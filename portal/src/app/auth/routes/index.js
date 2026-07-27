@@ -1,4 +1,6 @@
-import { Main, Signin, Signup } from './components';
+const Main = () => import('../main.vue');
+const Signin = () => import('../components/signin.vue');
+const Signup = () => import('../components/signup.vue');
 
 const children = [{
   name: 'auth.signin',

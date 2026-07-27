@@ -1,15 +1,12 @@
-import Vue from 'vue';
+import { createApp } from 'vue';
 
 import App from './Root.vue';
 import router from './router';
-import htttpPlugin from './plugins/http';
+import httpPlugin from './plugins/http';
 import store from './store';
 
-Vue.use(htttpPlugin);
-
-/* eslint-disable-next-line */
-new Vue({
-  router,
-  store,
-  render: (h) => h(App),
-}).$mount('#app');
+createApp(App)
+  .use(router)
+  .use(store)
+  .use(httpPlugin)
+  .mount('#app');

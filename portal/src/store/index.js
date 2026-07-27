@@ -1,10 +1,6 @@
-/* eslint-disable */
-import Vue from 'vue';
-import Vuex from 'vuex';
+import { createStore } from 'vuex';
 
-Vue.use(Vuex);
-
-export default new Vuex.Store({
+export default createStore({
   state: {
     user: {},
   },
@@ -19,6 +15,6 @@ export default new Vuex.Store({
     },
   },
   getters: {
-    getUser: state => state.user
-  }
+    getUser: (state) => state.user,
+  },
 });

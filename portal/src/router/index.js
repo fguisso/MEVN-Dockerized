@@ -1,16 +1,13 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import beforeEach from './beforeEach';
 import app from '../app';
 
-Vue.use(Router);
-
 const routes = [...app];
 
-const router = new Router({
+const router = createRouter({
+  history: createWebHistory(),
   routes,
   linkActiveClass: 'active',
-  mode: 'history',
 });
 
 router.beforeEach(beforeEach);
