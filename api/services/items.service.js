@@ -1,50 +1,26 @@
-const Q = require('q')
 const { items } = require('../models/db-connection')
 
 const service = {}
 
-const list = () => {
-    const deferred = Q.defer()
-    items.find({}, (err, itemsList) => {
-        if (err) deferred.reject(`${err.name} : ${err.message}`)
-        if (itemsList) deferred.resolve(itemsList)
-        else deferred.resolve('Nothing to show here!')
-    })
-
-    return deferred.promise
+const list = async () => {
+    const itemsList = await items.find({})
+    return itemsList || 'Nothing to show here!'
 }
 
-const countItems = () => {
-    const deferred = Q.defer()
-
-    items.countDocuments({}, (err, count) => {
-        if (err) deferred.reject(`${err.name} : ${err.message}`)
-        if (count) deferred.resolve(count)
-        else deferred.resolve('Nothing to show here! Wheres my Count?')
-    })
-
-    return deferred.promise
+const countItems = async () => {
+    const count = await items.countDocuments({})
+    return count || 'Nothing to show here! Wheres my Count?'
 }
 
-const recentItems = () => {
-    const deferred = Q.defer()
-
-    items.find({})
+const recentItems = async () => {
+    const itemsList = await items.find({})
         .sort({ created_at: -1 })
         .limit(5)
         .select({ name: 1, created_at: 1 })
-        .exec((err, itemsList) => {
-            if (err) deferred.reject(`${err.name} : ${err.message}`)
-            if (itemsList) deferred.resolve(itemsList)
-            else deferred.resolve('Nothing to show here!')
-        })
-
-    return deferred.promise
+    return itemsList || 'Nothing to show here!'
 }
 
-const create = (itemParam) => {
-    const deferred = Q.defer()
-
+const create = async (itemParam) => {
     const newItem = new items({
         name: itemParam.name,
         solicitante: itemParam.solicitante,
@@ -52,36 +28,20 @@ const create = (itemParam) => {
         created_at: new Date(),
         updated_at: new Date() })
 
-    newItem.save((err) => {
-        if (err) deferred.reject(`${err.name} : ${err.message}`)
-        else deferred.resolve('Successful item creation.')
-    })
-
-    return deferred.promise
+    await newItem.save()
+    return 'Successful item creation.'
 }
 
-const update = (_id, itemParam) => {
-    const deferred = Q.defer()
-
+const update = async (_id, itemParam) => {
     itemParam.updated_at = new Date()
 
-    items.findByIdAndUpdate(_id, itemParam, (err) => {
-        if (err) deferred.reject(`${err.name} : ${err.message}`)
-        else deferred.resolve('Item has been updated.')
-    })
-
-    return deferred.promise
+    await items.findByIdAndUpdate(_id, itemParam)
+    return 'Item has been updated.'
 }
 
-const _delete = (_id) => {
-    const deferred = Q.defer()
-
-    items.findByIdAndRemove(_id, (err) => {
-        if (err) deferred.reject(`${err.name} : ${err.message}`)
-        else deferred.resolve('Item has been deleted.')
-    })
-
-    return deferred.promise
+const _delete = async (_id) => {
+    await items.findByIdAndDelete(_id)
+    return 'Item has been deleted.'
 }
 
 service.list = list

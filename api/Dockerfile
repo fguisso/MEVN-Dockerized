@@ -1,11 +1,14 @@
-FROM node:16.15.0
+FROM node:24-alpine
+
+ENV NODE_ENV=production
 
 WORKDIR /usr/src/api
 
-RUN mkdir -p /usr/src/api
+COPY package*.json ./
+RUN npm ci --omit=dev
 
-COPY . /usr/src/api
-
-RUN npm install
+COPY . .
 
 EXPOSE 3000
+
+CMD ["node", "server.js"]
