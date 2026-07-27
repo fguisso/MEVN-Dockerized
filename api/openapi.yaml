@@ -1,0 +1,422 @@
+openapi: 3.1.0
+info:
+  title: MEVN Node API
+  description: >
+    REST API for the MEVN-Dockerized stack (MongoDB, Express, Vue, Node).
+    Protected routes require a JWT obtained from `POST /users/auth`,
+    sent as `Authorization: Bearer <token>`.
+  version: 2.0.0
+  license:
+    name: WTFPL
+    identifier: WTFPL
+
+servers:
+  - url: http://localhost:3000
+    description: Local development
+
+tags:
+  - name: users
+    description: System users
+  - name: items
+    description: Items managed by the portal
+  - name: info
+    description: Dashboard statistics
+
+paths:
+  /:
+    get:
+      summary: Health check
+      description: Returns a plain "Hello World!" — useful to check the API is up.
+      security: []
+      responses:
+        '200':
+          description: API is running
+          content:
+            text/plain:
+              example: Hello World!
+
+  /users/init:
+    get:
+      tags: [users]
+      summary: Create the default admin user
+      security: []
+      description: |
+        Creates the seed admin account (`admin@admin.com` / `admin`).
+        Call it once after the first boot.
+      responses:
+        '200':
+          description: Admin created
+          content:
+            text/plain:
+              example: Successful user creation.
+        '400':
+          description: Admin already exists
+          content:
+            text/plain:
+              example: E-mail admin@admin.com is already taken.
+
+  /users/auth:
+    post:
+      tags: [users]
+      summary: Authenticate and retrieve a JWT
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+            example:
+              email: admin@admin.com
+              password: admin
+      responses:
+        '200':
+          description: Authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Wrong credentials (user found, password mismatch handled as 400/401)
+        '400':
+          description: Unknown e-mail or invalid request
+          content:
+            text/plain:
+              example: E-mail some@mail.com not exist.
+
+  /users/register:
+    post:
+      tags: [users]
+      summary: Register a new user
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, email, password]
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                admin:
+                  type: boolean
+                  default: false
+      responses:
+        '200':
+          description: User created
+          content:
+            text/plain:
+              example: Successful user creation.
+        '400':
+          description: E-mail already taken or validation error
+          content:
+            text/plain:
+              example: E-mail some@mail.com is already taken.
+
+  /users/list:
+    get:
+      tags: [users]
+      summary: List all users
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Users (without hash, e-mail and avatar)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /users/{userId}:
+    parameters:
+      - $ref: '#/components/parameters/ObjectId'
+    get:
+      tags: [users]
+      summary: Get a user by id
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The user (without hash, e-mail and avatar)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    put:
+      tags: [users]
+      summary: Update a user
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                admin:
+                  type: boolean
+      responses:
+        '200':
+          description: Updated
+          content:
+            text/plain:
+              example: User has been updated.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      tags: [users]
+      summary: Delete a user
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Deleted
+          content:
+            text/plain:
+              example: User has been deleted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /items/list:
+    get:
+      tags: [items]
+      summary: List all items
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /items/register:
+    post:
+      tags: [items]
+      summary: Create a new item
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, solicitante, status]
+              properties:
+                name:
+                  type: string
+                solicitante:
+                  type: string
+                status:
+                  type: string
+            example:
+              name: Arroz
+              solicitante: Admin
+              status: Pending
+      responses:
+        '200':
+          description: Item created
+          content:
+            text/plain:
+              example: Successful item creation.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /items/{itemId}:
+    parameters:
+      - name: itemId
+        in: path
+        required: true
+        description: MongoDB ObjectId of the item
+        schema:
+          type: string
+    put:
+      tags: [items]
+      summary: Update an item
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                solicitante:
+                  type: string
+                status:
+                  type: string
+      responses:
+        '200':
+          description: Updated
+          content:
+            text/plain:
+              example: Item has been updated.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      tags: [items]
+      summary: Delete an item
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Deleted
+          content:
+            text/plain:
+              example: Item has been deleted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /info:
+    get:
+      tags: [info]
+      summary: Dashboard statistics
+      description: Item count, user count and the five most recent items.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  itemsCount:
+                    type: integer
+                  userCount:
+                    type: integer
+                  recentes:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        created_at:
+                          type: string
+                          format: date-time
+              example:
+                itemsCount: 3
+                userCount: 1
+                recentes:
+                  - _id: 6a6745f85ad6f31a34294ed5
+                    name: Arroz
+                    created_at: 2026-07-27T11:50:16.582Z
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT signed with the API `SECRET`, obtained from `POST /users/auth`.
+
+  parameters:
+    ObjectId:
+      name: userId
+      in: path
+      required: true
+      description: MongoDB ObjectId of the user
+      schema:
+        type: string
+
+  responses:
+    Unauthorized:
+      description: Missing or invalid JWT
+      content:
+        text/plain:
+          example: Invalid token.
+
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        admin:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        __v:
+          type: integer
+
+    Item:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        solicitante:
+          type: string
+        status:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        __v:
+          type: integer
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: 'JWT to send as `Authorization: Bearer <token>`'
+        name:
+          type: string
+        avatarUrl:
+          type: string
+          format: uri
+        isAdmin:
+          type: boolean
