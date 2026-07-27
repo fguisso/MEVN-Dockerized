@@ -27,8 +27,8 @@
     </section>
     <section class="section">
       <div class="container">
-        <h1 class="title is-8">Ultimos itens criados</h1>
-        <table class="table column is-8">
+        <h1 class="title is-4">Ultimos itens criados</h1>
+        <table class="table is-fullwidth">
           <tbody>
             <tr v-for="item in recentItems" :key="item.id">
               <td>{{ item.name }}</td>

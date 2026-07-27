@@ -18,7 +18,7 @@
       </div>
     </nav>
     <hr>
-    <table class="table">
+    <table class="table is-fullwidth">
       <thead>
         <tr>
           <th></th>
@@ -35,8 +35,9 @@
           <td>{{ item.solicitante }}</td>
           <td>{{ item.status }}</td>
           <td>
-            <a class="button is-link" @click="edit(item._id)" @keypress="edit(item._id)">Editar</a>
-            <a class="button is-link" @click="remove(item._id)"
+            <a class="button is-info is-small" @click="edit(item._id)"
+              @keypress="edit(item._id)">Editar</a>
+            <a class="button is-danger is-small" @click="remove(item._id)"
               @keypress="remove(item._id)">Apagar</a>
           </td>
         </tr>

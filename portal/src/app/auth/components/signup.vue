@@ -8,47 +8,47 @@
       <div class="content">
         <h3>Nome:</h3>
         <div class="field">
-          <p class="control has-icon">
+          <p class="control has-icons-left">
             <input
               aria-label="test"
               class="input is-medium"
-              type="email"
+              type="text"
               placeholder="Your name"
               v-model="name"
             >
-            <span class="icon is-medium">
-              <i class="fa fa-envelope"></i>
+            <span class="icon is-medium is-left">
+              <i class="fa fa-user"></i>
             </span>
           </p>
         </div>
         <h3>Email:</h3>
         <div class="field">
-          <p class="control has-icon">
+          <p class="control has-icons-left">
             <input
               aria-label="test"
               class="input is-medium" type="email" placeholder="your@email.com" v-model="email"
             >
-            <span class="icon is-medium">
+            <span class="icon is-medium is-left">
               <i class="fa fa-envelope"></i>
             </span>
           </p>
         </div>
         <h3>Senha:</h3>
         <div class="field">
-          <p class="control has-icon">
+          <p class="control has-icons-left">
             <input
               aria-label="test"
               v-bind:class="{ 'is-success': this.password.length >= 6 }" class="input is-medium"
               type="password" placeholder="Password" v-model="password"
             >
-            <span class="icon is-medium">
+            <span class="icon is-medium is-left">
               <i class="fa fa-lock"></i>
             </span>
           </p>
         </div>
       <h3>Confirmar senha:</h3>
       <div class="field">
-        <p class="control has-icon">
+        <p class="control has-icons-left">
           <input
             aria-label="test"
             v-bind:class="{
@@ -57,7 +57,7 @@
             }"
             class="input is-medium" type="password" placeholder="Password" v-model="pwConfirm"
           >
-          <span class="icon is-medium">
+          <span class="icon is-medium is-left">
             <i class="fa fa-lock"></i>
           </span>
         </p>
@@ -67,7 +67,7 @@
     <footer class="modal-card-foot">
       <button
         aria-label="test"
-        v-bind:class="{ 'is-disabled' : !(isPassConfirmed()) || this.password === '' }"
+        :disabled="!(isPassConfirmed()) || this.password === ''"
         class="button is-success" @click="submit">Registrar</button>
     </footer>
   </div>

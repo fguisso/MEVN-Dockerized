@@ -1,29 +1,37 @@
 <template>
   <div class="column is-3">
-    <aside class="menu">
+    <aside class="menu p-4">
       <ul class="menu-list">
         <li>
           <a @click="navigate('dashboard')" @keypress="navigate('dashboard')">
-            <span class="icon"><i class="fa fa-home"></i></span>
-            <span>Home</span>
+            <span class="icon-text">
+              <span class="icon"><i class="fa fa-home"></i></span>
+              <span>Home</span>
+            </span>
           </a>
         </li>
         <li>
           <a @click="navigate('users.list')" @keypress="navigate('users.list')">
-            <span class="icon"><i class="fa fa-user"></i></span>
-            <span>Usuários</span>
+            <span class="icon-text">
+              <span class="icon"><i class="fa fa-user"></i></span>
+              <span>Usuários</span>
+            </span>
           </a>
         </li>
         <li>
           <a @click="navigate('items.list')" @keypress="navigate('items.list')">
-            <span class="icon"><i class="fa fa-list"></i></span>
-            <span>Itens</span>
+            <span class="icon-text">
+              <span class="icon"><i class="fa fa-list"></i></span>
+              <span>Itens</span>
+            </span>
           </a>
         </li>
         <li>
           <a @click="logout" @keypress="logout">
-            <span class="icon"><i class="fa fa-sign-out"></i></span>
-            <span>Sair</span>
+            <span class="icon-text">
+              <span class="icon"><i class="fa fa-sign-out"></i></span>
+              <span>Sair</span>
+            </span>
           </a>
         </li>
       </ul>

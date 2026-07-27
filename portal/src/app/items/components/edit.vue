@@ -34,10 +34,8 @@
         </p>
       </div>
       <hr>
-      <button v-bind:class="{
-        'is-disabled' : this.name === '' && this.solicitante === '' && this.status == ''
-        }"
-        type="button"  class="button is-primary" @click="edit"
+      <button :disabled="name === '' && solicitante === '' && status === ''"
+        type="button" class="button is-primary" @click="edit"
       >Editar</button>
       <button type="button" class="button is-danger" @click="exit">Sair</button>
     </div>

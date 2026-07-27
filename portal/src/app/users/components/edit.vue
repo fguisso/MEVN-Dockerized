@@ -32,10 +32,9 @@
         </p>
       </div>
       <hr>
-      <button v-bind:class="{
-        'is-disabled' : this.name === '' && this.accessLevel === '' &&
-        this.email === '' && this.password === ''
-        }" type="button"  class="button is-primary" @click="edit">Editar</button>
+      <button :disabled="name === '' && accessLevel === '' &&
+        email === '' && password === ''"
+        type="button" class="button is-primary" @click="edit">Editar</button>
       <button type="button" class="button is-danger" @click="exit">Sair</button>
     </div>
   </div>

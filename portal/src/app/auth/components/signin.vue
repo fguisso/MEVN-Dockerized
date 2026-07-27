@@ -8,7 +8,7 @@
       <div class="content">
         <h3>Email:</h3>
         <div class="field">
-          <p class="control has-icon">
+          <p class="control has-icons-left">
             <input
               aria-label="test"
               class="input is-medium"
@@ -16,14 +16,14 @@
               placeholder="your@email.com"
               v-model="email"
             >
-            <span class="icon is-medium">
+            <span class="icon is-medium is-left">
               <i class="fa fa-envelope"></i>
             </span>
           </p>
         </div>
         <h3>Senha:</h3>
         <div class="field">
-          <p class="control has-icon">
+          <p class="control has-icons-left">
             <input
               aria-label="test"
               class="input is-medium"
@@ -31,7 +31,7 @@
               placeholder="Password"
               v-model="password"
             >
-            <span class="icon is-medium">
+            <span class="icon is-medium is-left">
               <i class="fa fa-lock"></i>
             </span>
           </p>

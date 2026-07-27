@@ -13,14 +13,12 @@
       </div>
       <div v-if="getUser.isAdmin" class="level-right">
         <div class="level-item">
-          <button type="button" v-bind:class="{
-            'is-disabled' : this.checkedIds.length <= 0
-            }" class="button is-danger" @click="remove">Remover</button>
+          <button type="button" :disabled="checkedIds.length <= 0"
+            class="button is-danger" @click="remove">Remover</button>
         </div>
         <div class="level-item">
-          <button type="button" v-bind:class="{
-            'is-disabled' : this.checkedIds.length !== 1
-            }" class="button is-info" @click="edit">Editar</button>
+          <button type="button" :disabled="checkedIds.length !== 1"
+            class="button is-info" @click="edit">Editar</button>
         </div>
         <div class="level-item">
           <button class="button is-primary" @click="navigate('newuser.form')">Novo</button>
@@ -28,7 +26,7 @@
       </div>
     </nav>
     <hr>
-    <table class="table">
+    <table class="table is-fullwidth">
       <thead>
         <tr>
           <th></th>
@@ -53,14 +51,12 @@
       </div>
       <div class="level-right">
         <div class="level-item">
-          <button type="button" v-bind:class="{
-            'is-disabled' : this.checkedIds.length <= 0
-            }" class="button is-danger" @click="remove">Remover</button>
+          <button type="button" :disabled="checkedIds.length <= 0"
+            class="button is-danger" @click="remove">Remover</button>
         </div>
         <div class="level-item">
-          <button type="button" v-bind:class="{
-            'is-disabled' : this.checkedIds.length !== 1
-            }" class="button is-info" @click="edit">Editar</button>
+          <button type="button" :disabled="checkedIds.length !== 1"
+            class="button is-info" @click="edit">Editar</button>
         </div>
         <div class="level-item">
           <button class="button is-primary" @click="navigate('newuser.form')">Novo</button>

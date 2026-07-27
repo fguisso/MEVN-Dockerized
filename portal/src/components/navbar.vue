@@ -1,25 +1,26 @@
 <template>
-  <nav class="nav has-shadow tabs is-large">
+  <nav class="navbar has-shadow">
     <div class="container">
-      <div class="nav-left">
-        <p class="nav-item title is-3">
+      <div class="navbar-brand">
+        <p class="navbar-item title is-4 mb-0">
           Portal Gestor
         </p>
       </div>
-      <div class="nav-right">
-        <a class="nav-item is-tab">
-          <figure class="image is-32x32" style="margin-right: 10px;">
-            <img alt="profile-pic" :src="getUser.avatarUrl" style="border-radius: 4px;">
-          </figure>
-          {{ getUser.name }}
-        </a>
+      <div class="navbar-menu">
+        <div class="navbar-end">
+          <a class="navbar-item">
+            <figure class="image is-32x32 mr-2">
+              <img alt="profile-pic" class="is-rounded" :src="getUser.avatarUrl">
+            </figure>
+            {{ getUser.name }}
+          </a>
+        </div>
       </div>
     </div>
   </nav>
 </template>
 
 <script>
- 
 import { mapGetters } from 'vuex';
 
 export default {
@@ -31,7 +32,7 @@ export default {
 </script>
 
 <style>
-  .nav-item img {
-    max-height: 2.3rem;
+  .navbar-item img {
+    max-height: 2rem;
   }
 </style>
