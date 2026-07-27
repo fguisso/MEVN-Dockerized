@@ -1,5 +1,6 @@
 <template>
   <div class="column is-8">
+    <h1 class="title is-4 mt-4">Itens</h1>
     <nav class="level">
       <div class="level-left">
         <div class="level-item">
@@ -35,10 +36,12 @@
           <td>{{ item.solicitante }}</td>
           <td>{{ item.status }}</td>
           <td>
-            <a class="button is-info is-small" @click="edit(item._id)"
-              @keypress="edit(item._id)">Editar</a>
-            <a class="button is-danger is-small" @click="remove(item._id)"
-              @keypress="remove(item._id)">Apagar</a>
+            <div class="buttons are-small">
+              <a class="button is-info" @click="edit(item._id)"
+                @keypress="edit(item._id)">Editar</a>
+              <a class="button is-danger" @click="remove(item._id)"
+                @keypress="remove(item._id)">Apagar</a>
+            </div>
           </td>
         </tr>
       </tbody>

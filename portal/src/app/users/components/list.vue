@@ -1,5 +1,6 @@
 <template>
   <div class="column is-8">
+    <h1 class="title is-4 mt-4">Usuários</h1>
     <nav class="level">
       <div class="level-left">
         <div class="level-item">
@@ -13,15 +14,13 @@
       </div>
       <div v-if="getUser.isAdmin" class="level-right">
         <div class="level-item">
-          <button type="button" :disabled="checkedIds.length <= 0"
-            class="button is-danger" @click="remove">Remover</button>
-        </div>
-        <div class="level-item">
-          <button type="button" :disabled="checkedIds.length !== 1"
-            class="button is-info" @click="edit">Editar</button>
-        </div>
-        <div class="level-item">
-          <button class="button is-primary" @click="navigate('newuser.form')">Novo</button>
+          <div class="buttons">
+            <button type="button" :disabled="checkedIds.length <= 0"
+              class="button is-danger" @click="remove">Remover</button>
+            <button type="button" :disabled="checkedIds.length !== 1"
+              class="button is-info" @click="edit">Editar</button>
+            <button class="button is-primary" @click="navigate('newuser.form')">Novo</button>
+          </div>
         </div>
       </div>
     </nav>
@@ -51,15 +50,13 @@
       </div>
       <div class="level-right">
         <div class="level-item">
-          <button type="button" :disabled="checkedIds.length <= 0"
-            class="button is-danger" @click="remove">Remover</button>
-        </div>
-        <div class="level-item">
-          <button type="button" :disabled="checkedIds.length !== 1"
-            class="button is-info" @click="edit">Editar</button>
-        </div>
-        <div class="level-item">
-          <button class="button is-primary" @click="navigate('newuser.form')">Novo</button>
+          <div class="buttons">
+            <button type="button" :disabled="checkedIds.length <= 0"
+              class="button is-danger" @click="remove">Remover</button>
+            <button type="button" :disabled="checkedIds.length !== 1"
+              class="button is-info" @click="edit">Editar</button>
+            <button class="button is-primary" @click="navigate('newuser.form')">Novo</button>
+          </div>
         </div>
       </div>
     </nav>

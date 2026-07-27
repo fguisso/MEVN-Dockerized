@@ -32,10 +32,12 @@
         </p>
       </div>
       <hr>
-      <button :disabled="name === '' && accessLevel === '' &&
-        email === '' && password === ''"
-        type="button" class="button is-primary" @click="edit">Editar</button>
-      <button type="button" class="button is-danger" @click="exit">Sair</button>
+      <div class="buttons">
+        <button :disabled="name === '' && accessLevel === '' &&
+          email === '' && password === ''"
+          type="button" class="button is-primary" @click="edit">Editar</button>
+        <button type="button" class="button is-danger" @click="exit">Sair</button>
+      </div>
     </div>
   </div>
 </template>

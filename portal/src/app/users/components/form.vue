@@ -25,9 +25,11 @@
         </p>
       </div>
       <hr>
-      <button :disabled="!(name !== '' && email !== '' && password !== '')"
-        type="button" class="button is-primary" @click="submit">Registrar</button>
-      <button type="button" class="button is-danger" @click="exit">Sair</button>
+      <div class="buttons">
+        <button :disabled="!(name !== '' && email !== '' && password !== '')"
+          type="button" class="button is-primary" @click="submit">Registrar</button>
+        <button type="button" class="button is-danger" @click="exit">Sair</button>
+      </div>
     </div>
   </div>
 </template>
