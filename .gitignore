@@ -3,7 +3,6 @@
 .LSOverride
 
 node_modules/
-server/dist/
-client/dist/
+dist/
 
-client/.env
+.env

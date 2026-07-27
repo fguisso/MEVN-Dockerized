@@ -1,5 +1,3 @@
-version: "3.3"
-
 services:
   api:
     container_name: api
@@ -10,11 +8,14 @@ services:
       - "3000:3000"
     networks:
       - mevn-dockerized
-    command: ["npm", "start"]
+    depends_on:
+      - mongodb
 
   mongodb:
     container_name: mongodb
-    image: mongo
+    image: mongo:8
+    volumes:
+      - mongodb-data:/data/db
     networks:
       - mevn-dockerized
 
@@ -27,3 +28,6 @@ services:
 
 networks:
   mevn-dockerized:
+
+volumes:
+  mongodb-data:
