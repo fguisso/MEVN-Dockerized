@@ -2,6 +2,8 @@
 
 A dockerized MEVN stack: **M**ongoDB, **E**xpress, **V**ue and **N**ode.js.
 
+![Portal Gestor dashboard](docs/dashboard.png)
+
 | Service   | Stack                                    | Port |
 | --------- | ---------------------------------------- | ---- |
 | `api`     | Node.js 24, Express 5, Mongoose 9        | 3000 |
