@@ -1,18 +1,21 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const { users } = require('../models/db-connection')
+const { string, objectId, fields } = require('./validation')
 
 const service = {}
 
 const secret = process.env.SECRET
 
 const auth = async (email, password) => {
+    email = string(email, 'email')
+    password = string(password, 'password')
     const user = await users.findOne({ email }, { created_at: 0, updated_at: 0 })
 
-    if (!user) throw `E-mail ${email} not exist.`
+    if (!user) throw new Error('Invalid credentials.')
 
     const match = await bcrypt.compare(password, user.hash)
-    if (!match) throw 'Password incorrect!'
+    if (!match) throw new Error('Invalid credentials.')
 
     return {
         token: jwt.sign({ sub: user._id }, secret),
@@ -27,7 +30,7 @@ const list = async () => {
 }
 
 const getById = async (_id) => {
-    const user = await users.findById(_id, { hash: 0, email: 0, avatar: 0 })
+    const user = await users.findById(objectId(_id), { hash: 0, email: 0, avatar: 0 })
     return user || 'Nothing to show here!'
 }
 
@@ -37,8 +40,13 @@ const countUsers = async () => {
 }
 
 const create = async (userParam) => {
-    const existing = await users.findOne({ email: userParam.email })
-    if (existing) throw `E-mail ${userParam.email} is already taken.`
+    const { name, email, password } = fields(userParam, ['name', 'email', 'password'])
+    string(name, 'name')
+    string(email, 'email')
+    string(password, 'password')
+    if (userParam.admin !== undefined && typeof userParam.admin !== 'boolean') throw new TypeError('Invalid admin.')
+    const existing = await users.findOne({ email })
+    if (existing) throw new Error('E-mail is already taken.')
 
     const avatarRandom = () => {
         const ghIds = [342215, 5755568, 499550]
@@ -47,9 +55,9 @@ const create = async (userParam) => {
     }
 
     const newUser = new users({
-        name: userParam.name,
-        email: userParam.email,
-        hash: bcrypt.hashSync(userParam.password, 10),
+        name,
+        email,
+        hash: bcrypt.hashSync(password, 10),
         admin: userParam.admin || false,
         avatar: avatarRandom(),
         created_at: new Date(),
@@ -60,16 +68,21 @@ const create = async (userParam) => {
 }
 
 const update = async (_id, userParam) => {
-    userParam.updated_at = new Date()
+    const id = objectId(_id)
+    const update = fields(userParam, ['name', 'email'])
+    if (Object.hasOwn(userParam, 'admin')) {
+        if (typeof userParam.admin !== 'boolean') throw new TypeError('Invalid admin.')
+        update.admin = userParam.admin
+    }
+    if (Object.hasOwn(userParam, 'password')) update.hash = bcrypt.hashSync(string(userParam.password, 'password'), 10)
+    update.updated_at = new Date()
 
-    if (userParam.password) userParam.hash = bcrypt.hashSync(userParam.password, 10)
-
-    await users.findByIdAndUpdate(_id, userParam)
+    await users.findByIdAndUpdate(id, update)
     return 'User has been updated.'
 }
 
 const _delete = async (_id) => {
-    await users.findByIdAndDelete(_id)
+    await users.findByIdAndDelete(objectId(_id))
     return 'User has been deleted.'
 }
 

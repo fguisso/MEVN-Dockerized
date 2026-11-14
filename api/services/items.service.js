@@ -1,4 +1,5 @@
 const { items } = require('../models/db-connection')
+const { string, objectId, fields } = require('./validation')
 
 const service = {}
 
@@ -21,10 +22,12 @@ const recentItems = async () => {
 }
 
 const create = async (itemParam) => {
+    const input = fields(itemParam, ['name', 'solicitante', 'status'])
+    for (const name of ['name', 'solicitante', 'status']) string(input[name], name)
     const newItem = new items({
-        name: itemParam.name,
-        solicitante: itemParam.solicitante,
-        status: itemParam.status,
+        name: input.name,
+        solicitante: input.solicitante,
+        status: input.status,
         created_at: new Date(),
         updated_at: new Date() })
 
@@ -33,14 +36,16 @@ const create = async (itemParam) => {
 }
 
 const update = async (_id, itemParam) => {
-    itemParam.updated_at = new Date()
+    const id = objectId(_id)
+    const update = fields(itemParam, ['name', 'solicitante', 'status'])
+    update.updated_at = new Date()
 
-    await items.findByIdAndUpdate(_id, itemParam)
+    await items.findByIdAndUpdate(id, update)
     return 'Item has been updated.'
 }
 
 const _delete = async (_id) => {
-    await items.findByIdAndDelete(_id)
+    await items.findByIdAndDelete(objectId(_id))
     return 'Item has been deleted.'
 }
 

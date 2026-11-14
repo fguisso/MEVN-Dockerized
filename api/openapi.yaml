@@ -53,7 +53,7 @@ paths:
           description: Admin already exists
           content:
             text/plain:
-              example: E-mail admin@admin.com is already taken.
+              example: Invalid request.
 
   /users/auth:
     post:
@@ -89,7 +89,12 @@ paths:
           description: Unknown e-mail or invalid request
           content:
             text/plain:
-              example: E-mail some@mail.com not exist.
+              example: Invalid request.
+        '429':
+          description: More than ten login requests from the same client in fifteen minutes
+          content:
+            text/plain:
+              example: Too many login attempts. Please try again later.
 
   /users/register:
     post:
@@ -124,7 +129,7 @@ paths:
           description: E-mail already taken or validation error
           content:
             text/plain:
-              example: E-mail some@mail.com is already taken.
+              example: Invalid request.
 
   /users/list:
     get:
