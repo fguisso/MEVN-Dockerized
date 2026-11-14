@@ -23,15 +23,15 @@ flowchart LR
         vol[/"volume<br/>mongodb-data"/]
     end
 
-    browser -->|"SPA · http :8080"| portal
-    browser -->|"REST + JWT · http :3000"| api
+    browser -->|"SPA + /api/ · http :8080"| portal
+    portal -->|"REST + JWT · private Compose network"| api
     api -->|"Mongoose"| db
     db --- vol
 ```
 
 The portal serves the SPA and forwards `/api/` to the API on the Compose network.
-The browser authenticates with a JWT stored after sign-in. For public access,
-publish only the portal behind HTTPS; keep the API and MongoDB private.
+The browser authenticates with a JWT stored after sign-in. Only the portal needs
+to be reachable by browsers; keep direct API access and MongoDB private.
 
 ## Quick start
 
@@ -48,10 +48,13 @@ publish only the portal behind HTTPS; keep the API and MongoDB private.
    docker compose up --build
    ```
 
-3. Open the apps:
+3. Open the apps on the Docker host:
 
    - Portal: <http://localhost:8080>
    - API: <http://localhost:3000>
+
+   The API port is bound to `127.0.0.1` by default. The portal is bound to
+   `0.0.0.0:8080`; restrict access with your firewall/proxy as needed.
 
 4. Before exposing the app, create the first admin **from inside the API container**
    with a unique password of at least 16 characters. On the Docker host, enter
@@ -70,6 +73,16 @@ publish only the portal behind HTTPS; keep the API and MongoDB private.
    non-admin accounts; an admin can grant admin rights using the user edit page.
    JWTs expire after eight hours, so sign in again when one expires.
 
+## Internal homelab preview
+
+For an internal browser preview, run the Compose stack on your Docker host and
+create an **internal** Nginx Proxy Manager (NPM) proxy host pointing to
+`http://<docker-host-LAN-IP>:8080`. Resolve its hostname using internal DNS and
+enable HTTPS with a certificate valid for that internal name. Keep the API's
+`127.0.0.1:3000` binding and do not publish MongoDB. The browser calls the
+same-origin `/api/` path through the portal's nginx proxy; it does not connect
+to port 3000 directly. Do not use a public Quick Tunnel for an internal preview.
+
 ## API
 
 The API is documented with **OpenAPI 3.1** in [`api/openapi.yaml`](api/openapi.yaml) —
@@ -83,8 +96,8 @@ OpenAPI tooling at it. Summary:
 | `POST`   | `/users/register` | —    | Register a new user                  |
 | `GET`    | `/users/list`     | JWT  | List users                           |
 | `GET`    | `/users/{id}`     | JWT  | Get a user by id                     |
-| `PUT`    | `/users/{id}`     | JWT  | Update a user                        |
-| `DELETE` | `/users/{id}`     | JWT  | Delete a user                        |
+| `PUT`    | `/users/{id}`     | JWT  | Edit self; admins can edit others and roles |
+| `DELETE` | `/users/{id}`     | Admin JWT | Delete a user                  |
 | `GET`    | `/items/list`     | JWT  | List items                           |
 | `POST`   | `/items/register` | JWT  | Create an item                       |
 | `PUT`    | `/items/{id}`     | JWT  | Update an item                       |
