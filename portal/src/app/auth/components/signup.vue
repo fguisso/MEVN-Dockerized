@@ -33,12 +33,12 @@
             </span>
           </p>
         </div>
-        <h3>Senha:</h3>
+        <h3>Senha (mínimo de 12 caracteres):</h3>
         <div class="field">
           <p class="control has-icons-left">
             <input
               aria-label="test"
-              v-bind:class="{ 'is-success': this.password.length >= 6 }" class="input is-medium"
+              v-bind:class="{ 'is-success': this.password.length >= 12 }" class="input is-medium"
               type="password" placeholder="Password" v-model="password"
             >
             <span class="icon is-medium is-left">
@@ -53,7 +53,7 @@
             aria-label="test"
             v-bind:class="{
               'is-danger' : !(isPassConfirmed()) &&
-              this.password.length <= 6, 'is-success': this.password.length >= 6
+              this.password.length < 12, 'is-success': this.password.length >= 12
             }"
             class="input is-medium" type="password" placeholder="Password" v-model="pwConfirm"
           >
@@ -67,7 +67,7 @@
     <footer class="modal-card-foot">
       <button
         aria-label="test"
-        :disabled="!(isPassConfirmed()) || this.password === ''"
+        :disabled="!(isPassConfirmed()) || this.password.length < 12"
         class="button is-success" @click="submit">Registrar</button>
     </footer>
   </div>

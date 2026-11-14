@@ -7,6 +7,11 @@ const service = {}
 
 const secret = process.env.SECRET
 
+const newPassword = value => {
+    if (typeof value !== 'string' || value.length < 12) throw new TypeError('Password must be at least 12 characters.')
+    return value
+}
+
 const auth = async (email, password) => {
     email = string(email, 'email')
     password = string(password, 'password')
@@ -18,7 +23,7 @@ const auth = async (email, password) => {
     if (!match) throw new Error('Invalid credentials.')
 
     return {
-        token: jwt.sign({ sub: user._id }, secret),
+        token: jwt.sign({ sub: user._id }, secret, { expiresIn: '8h' }),
         name: user.name,
         avatar: user.avatar,
         isAdmin: user.admin }
@@ -34,6 +39,8 @@ const getById = async (_id) => {
     return user || 'Nothing to show here!'
 }
 
+const access = async (_id) => users.findById(objectId(_id), { admin: 1 })
+
 const countUsers = async () => {
     const count = await users.countDocuments({})
     return count || 'Nothing to show here!'
@@ -43,8 +50,7 @@ const create = async (userParam) => {
     const { name, email, password } = fields(userParam, ['name', 'email', 'password'])
     string(name, 'name')
     string(email, 'email')
-    string(password, 'password')
-    if (userParam.admin !== undefined && typeof userParam.admin !== 'boolean') throw new TypeError('Invalid admin.')
+    newPassword(password)
     const existing = await users.findOne({ email })
     if (existing) throw new Error('E-mail is already taken.')
 
@@ -58,13 +64,26 @@ const create = async (userParam) => {
         name,
         email,
         hash: bcrypt.hashSync(password, 10),
-        admin: userParam.admin || false,
+        admin: false,
         avatar: avatarRandom(),
         created_at: new Date(),
         updated_at: new Date() })
 
     await newUser.save()
     return 'Successful user creation.'
+}
+
+const bootstrapAdmin = async ({ email, password }) => {
+    email = string(email, 'email')
+    if (typeof password !== 'string' || password.length < 16) throw new TypeError('Admin password must be at least 16 characters.')
+    if (await users.countDocuments({}) !== 0) throw new Error('Users already exist; bootstrap is disabled.')
+    const now = new Date()
+    await new users({
+        name: 'Admin', email, hash: bcrypt.hashSync(password, 10), admin: true,
+        avatar: 'https://avatars.githubusercontent.com/u/342215?v=3&s=32',
+        created_at: now, updated_at: now
+    }).save()
+    return 'Admin created.'
 }
 
 const update = async (_id, userParam) => {
@@ -74,7 +93,7 @@ const update = async (_id, userParam) => {
         if (typeof userParam.admin !== 'boolean') throw new TypeError('Invalid admin.')
         update.admin = userParam.admin
     }
-    if (Object.hasOwn(userParam, 'password')) update.hash = bcrypt.hashSync(string(userParam.password, 'password'), 10)
+    if (Object.hasOwn(userParam, 'password')) update.hash = bcrypt.hashSync(newPassword(userParam.password), 10)
     update.updated_at = new Date()
 
     await users.findByIdAndUpdate(id, update)
@@ -90,7 +109,9 @@ service.auth = auth
 service.list = list
 service.count = countUsers
 service.getById = getById
+service.access = access
 service.create = create
+service.bootstrapAdmin = bootstrapAdmin
 service.update = update
 service.delete = _delete
 

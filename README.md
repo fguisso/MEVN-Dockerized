@@ -6,7 +6,7 @@ A dockerized MEVN stack: **M**ongoDB, **E**xpress, **V**ue and **N**ode.js.
 
 | Service   | Stack                                    | Port |
 | --------- | ---------------------------------------- | ---- |
-| `api`     | Node.js 24, Express 5, Mongoose 9        | 3000 |
+| `api`     | Node.js 24, Express 5, Mongoose 9        | 3000 (internal API; do not publish directly) |
 | `portal`  | Vue 3 + Vite, served by nginx            | 8080 |
 | `mongodb` | MongoDB 8 (data persisted in a volume)   | —    |
 
@@ -29,8 +29,9 @@ flowchart LR
     db --- vol
 ```
 
-The portal only serves the static SPA — the app in the browser talks to the
-API directly, authenticating with a JWT stored after sign-in.
+The portal serves the SPA and forwards `/api/` to the API on the Compose network.
+The browser authenticates with a JWT stored after sign-in. For public access,
+publish only the portal behind HTTPS; keep the API and MongoDB private.
 
 ## Quick start
 
@@ -52,13 +53,22 @@ API directly, authenticating with a JWT stored after sign-in.
    - Portal: <http://localhost:8080>
    - API: <http://localhost:3000>
 
-4. Create the admin user (once):
+4. Before exposing the app, create the first admin **from inside the API container**
+   with a unique password of at least 16 characters. On the Docker host, enter
+   it interactively (never put the password in a shell command or commit it):
 
    ```sh
-   curl http://localhost:3000/users/init
+   read -r -p 'Admin email: ' ADMIN_EMAIL
+   read -r -s -p 'Admin password (16+ characters): ' ADMIN_PASSWORD; printf '\n'
+   export ADMIN_EMAIL ADMIN_PASSWORD
+   docker compose exec -e ADMIN_EMAIL -e ADMIN_PASSWORD api npm run bootstrap-admin
+   unset ADMIN_EMAIL ADMIN_PASSWORD
    ```
 
-   Then sign in with `admin@admin.com` / `admin`.
+   This command works only while the user collection is empty. There is no public
+   bootstrap route or default admin password. Public registration creates only
+   non-admin accounts; an admin can grant admin rights using the user edit page.
+   JWTs expire after eight hours, so sign in again when one expires.
 
 ## API
 
@@ -69,7 +79,6 @@ OpenAPI tooling at it. Summary:
 | Method   | Path              | Auth | Description                          |
 | -------- | ----------------- | ---- | ------------------------------------ |
 | `GET`    | `/`               | —    | Health check                         |
-| `GET`    | `/users/init`     | —    | Create the default admin user        |
 | `POST`   | `/users/auth`     | —    | Authenticate and retrieve a JWT      |
 | `POST`   | `/users/register` | —    | Register a new user                  |
 | `GET`    | `/users/list`     | JWT  | List users                           |
@@ -95,6 +104,9 @@ SECRET=dev-secret DB_URI=mongodb://localhost:27017/mevn npm run dev
 ```
 
 `npm run dev` uses Node's built-in watch mode, so the server restarts on file changes.
+The API permits CORS only from `http://localhost:8080` by default (override with
+`CORS_ORIGIN` for a different local dev origin). The Vite dev server proxies
+`/api/` to `http://localhost:3000/` for the normal same-origin workflow.
 
 ### Portal
 
@@ -108,4 +120,4 @@ npm run preview  # serve the production build locally
 npm run lint     # ESLint
 ```
 
-The portal reads the API base URL from `VITE_API_URL` (defaults to `http://localhost:3000/`).
+The portal reads the API base URL from `VITE_API_URL` (defaults to `/api/`).

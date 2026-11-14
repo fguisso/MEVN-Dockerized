@@ -9,4 +9,12 @@ const authRateLimit = rateLimit({
     message: 'Too many login attempts. Please try again later.'
 })
 
-module.exports = { authRateLimit }
+const registrationRateLimit = rateLimit({
+    windowMs: 60 * 60 * 1000,
+    limit: 10,
+    standardHeaders: 'draft-8',
+    legacyHeaders: false,
+    message: 'Too many registrations. Please try again later.'
+})
+
+module.exports = { authRateLimit, registrationRateLimit }

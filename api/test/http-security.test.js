@@ -4,7 +4,11 @@ const express = require('express')
 const servicePath = require.resolve('../services/users.service')
 require.cache[servicePath] = {
     id: servicePath, filename: servicePath, loaded: true,
-    exports: { auth: async () => { throw new Error('<script>alert(1)</script>') } }
+    exports: {
+        auth: async () => { throw new Error('<script>alert(1)</script>') },
+        create: async () => 'Successful user creation.',
+        getById: async () => { throw new TypeError('Invalid id.') }
+    }
 }
 const controller = require('../controllers/users.controller')
 
@@ -27,6 +31,35 @@ test('auth error does not reflect exception HTML', async () => {
         assert.equal(response.status, 400)
         assert.match(response.headers.get('content-type'), /^text\/plain/)
         assert.doesNotMatch(await response.text(), /script|alert|Error:/i)
+    })
+})
+
+test('public init endpoint is not available', async () => {
+    const app = express()
+    app.use('/users', controller)
+    await serve(app, async url => {
+        const response = await fetch(`${url}/users/init`)
+        assert.equal(response.status, 400)
+    })
+})
+
+test('public registration is rate limited', async () => {
+    const { registrationRateLimit } = require('../middleware/auth-rate-limit')
+    const app = express()
+    app.use(express.json())
+    app.use('/users/register', registrationRateLimit)
+    app.use('/users', controller)
+    await serve(app, async url => {
+        const statuses = []
+        for (let i = 0; i < 11; i++) {
+            const response = await fetch(`${url}/users/register`, {
+                method: 'POST', headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({ name: 'QA', email: `qa${i}@example.test`, password: 'long-password-123' })
+            })
+            statuses.push(response.status)
+        }
+        assert.equal(statuses[0], 200)
+        assert.equal(statuses.at(-1), 429)
     })
 })
 

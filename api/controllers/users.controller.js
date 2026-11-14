@@ -1,19 +1,8 @@
 const express = require('express')
 const userService = require('../services/users.service')
+const { canEditUser, requireAdmin } = require('../middleware/user-access')
 
 const router = express.Router()
-
-const init = (req, res) => {
-    const userParam = {
-        name: 'Admin',
-        email: 'admin@admin.com',
-        password: 'admin',
-        admin: true }
-
-    userService.create(userParam)
-        .then(msg => res.status(200).send(msg))
-        .catch(() => res.status(400).type('text/plain').send('Invalid request.'))
-}
 
 const authUser = (req, res) => {
     userService.auth(req.body.email, req.body.password)
@@ -61,12 +50,11 @@ const deleteUser = (req, res) => {
         .catch(() => res.status(400).type('text/plain').send('Invalid request.'))
 }
 
-router.get('/init', init)
 router.get('/list', list)
 router.get('/:_id', getById)
 router.post('/auth', authUser)
 router.post('/register', registerUser)
-router.put('/:_id', updateUser)
-router.delete('/:_id', deleteUser)
+router.put('/:_id', canEditUser, updateUser)
+router.delete('/:_id', requireAdmin, deleteUser)
 
 module.exports = router
