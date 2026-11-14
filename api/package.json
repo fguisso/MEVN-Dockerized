@@ -7,13 +7,15 @@
   "license": "WTFPL",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js"
+    "dev": "node --watch server.js",
+    "test": "node --test test/*.test.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "express": "^5.2.1",
     "express-jwt": "^8.5.1",
+    "express-rate-limit": "^8.7.4",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^9.8.0"
+    "mongoose": "^9.12.1"
   }
 }

@@ -12,7 +12,7 @@ const init = (req, res) => {
 
     userService.create(userParam)
         .then(msg => res.status(200).send(msg))
-        .catch(err => res.status(400).send(err))
+        .catch(() => res.status(400).type('text/plain').send('Invalid request.'))
 }
 
 const authUser = (req, res) => {
@@ -28,37 +28,37 @@ const authUser = (req, res) => {
                 err: "Incorrect user or password."
             })
         })
-        .catch(err => res.status(400).send(err))
+        .catch(() => res.status(400).type('text/plain').send('Invalid request.'))
 }
 
 const list = (req, res) => {
     userService.list()
         .then(users => res.status(200).json(users))
-        .catch(err => res.status(400).send(err))
+        .catch(() => res.status(400).type('text/plain').send('Invalid request.'))
 }
 
 const getById = (req, res) => {
     userService.getById(req.params._id)
         .then(users => res.status(200).json(users))
-        .catch(err => res.status(400).send(err))
+        .catch(() => res.status(400).type('text/plain').send('Invalid request.'))
 }
 
 const registerUser = (req, res) => {
     userService.create(req.body)
         .then(msg => res.status(200).send(msg))
-        .catch(err => res.status(400).send(err))
+        .catch(() => res.status(400).type('text/plain').send('Invalid request.'))
 }
 
 const updateUser = (req, res) => {
     userService.update(req.params._id, req.body)
         .then(msg => res.status(200).send(msg))
-        .catch(err => res.status(400).send(err))
+        .catch(() => res.status(400).type('text/plain').send('Invalid request.'))
 }
 
 const deleteUser = (req, res) => {
     userService.delete(req.params._id)
         .then(msg => res.status(200).send(msg))
-        .catch(err => res.status(400).send(err))
+        .catch(() => res.status(400).type('text/plain').send('Invalid request.'))
 }
 
 router.get('/init', init)

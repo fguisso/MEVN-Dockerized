@@ -1,5 +1,6 @@
 const express = require('express')
 const { expressjwt } = require('express-jwt')
+const { authRateLimit } = require('./middleware/auth-rate-limit')
 
 const app = express()
 const secret = process.env.SECRET
@@ -21,6 +22,7 @@ app.use((req, res, next) => {
 })
 
 app.get('/', (req, res) => res.send('Hello World!'))
+app.use('/users/auth', authRateLimit)
 
 app.use('/users', expressjwt({ secret, algorithms: ['HS256'] })
     .unless({ path: ['/users/auth', '/users/init', '/users/register'] }))
