@@ -35,26 +35,6 @@ paths:
             text/plain:
               example: Hello World!
 
-  /users/init:
-    get:
-      tags: [users]
-      summary: Create the default admin user
-      security: []
-      description: |
-        Creates the seed admin account (`admin@admin.com` / `admin`).
-        Call it once after the first boot.
-      responses:
-        '200':
-          description: Admin created
-          content:
-            text/plain:
-              example: Successful user creation.
-        '400':
-          description: Admin already exists
-          content:
-            text/plain:
-              example: Invalid request.
-
   /users/auth:
     post:
       tags: [users]
@@ -100,6 +80,7 @@ paths:
     post:
       tags: [users]
       summary: Register a new user
+      description: Public registration always creates a non-admin account. Rate limited per IP.
       security: []
       requestBody:
         required: true
@@ -116,9 +97,6 @@ paths:
                   format: email
                 password:
                   type: string
-                admin:
-                  type: boolean
-                  default: false
       responses:
         '200':
           description: User created
@@ -130,6 +108,8 @@ paths:
           content:
             text/plain:
               example: Invalid request.
+        '429':
+          description: Too many registrations from this client
 
   /users/list:
     get:
@@ -169,6 +149,7 @@ paths:
     put:
       tags: [users]
       summary: Update a user
+      description: Administrators can edit any user and change roles. Others can edit only their own non-role fields.
       security:
         - bearerAuth: []
       requestBody:
@@ -195,9 +176,12 @@ paths:
               example: User has been updated.
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Not allowed to edit another user or change admin role
     delete:
       tags: [users]
       summary: Delete a user
+      description: Administrators only.
       security:
         - bearerAuth: []
       responses:

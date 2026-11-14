@@ -1,6 +1,6 @@
 const express = require('express')
 const { expressjwt } = require('express-jwt')
-const { authRateLimit } = require('./middleware/auth-rate-limit')
+const { authRateLimit, registrationRateLimit } = require('./middleware/auth-rate-limit')
 
 const app = express()
 const secret = process.env.SECRET
@@ -12,20 +12,23 @@ app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*')
-    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE')
-    res.header(
-        'Access-Control-Allow-Headers',
-        'Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Credentials')
-    res.header('Access-Control-Allow-Credentials', 'true')
+    const allowedOrigin = process.env.CORS_ORIGIN || 'http://localhost:8080'
+    if (req.headers.origin === allowedOrigin) {
+        res.header('Access-Control-Allow-Origin', allowedOrigin)
+        res.header('Vary', 'Origin')
+        res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS')
+        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+        if (req.method === 'OPTIONS') return res.sendStatus(204)
+    }
     next()
 })
 
 app.get('/', (req, res) => res.send('Hello World!'))
 app.use('/users/auth', authRateLimit)
+app.use('/users/register', registrationRateLimit)
 
 app.use('/users', expressjwt({ secret, algorithms: ['HS256'] })
-    .unless({ path: ['/users/auth', '/users/init', '/users/register'] }))
+    .unless({ path: ['/users/auth', '/users/register'] }))
 
 app.use('/items', expressjwt({ secret, algorithms: ['HS256'] }))
 app.use('/info', expressjwt({ secret, algorithms: ['HS256'] }))
